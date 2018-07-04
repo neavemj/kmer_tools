@@ -32,14 +32,19 @@ def trimmer(args, stem):
             print("\ntrimmomatic could not be found: try 'module load trimmomatic'\n")
             raise
 
+    # create output file names from the stem
+
+    F_paired = stem + "_1P.fastq.gz"
+    F_unpaired = stem + "_1U.fastq.gz"
+    R_paired = stem + "_2P.fastq.gz"
+    R_unpaired = stem + "_2U.fastq.gz"
+
     ## TRIM READS ##
     print("~~~ beginning trimming with trimmomatic ~~~")
 
     subprocess.check_output(["trimmomatic", "PE", "-threads", args.threads, args.forward_reads[0],
-                             args.reverse_reads[0], "-baseout", stem+".fastq.gz", "ILLUMINACLIP:" + adapter_path +
+                             args.reverse_reads[0], F_paired, F_unpaired, R_paired, R_unpaired, "ILLUMINACLIP:" +
+                             adapter_path +
                              ":2:30:10", "LEADING:3", "TRAILING:3", "SLIDINGWINDOW:4:20", "MINLEN:50"])
 
-    forward_trimmed = args.forward_reads[0].rstrip("R1.fastq.gz") + "1P.fastq.gz"
-    reverse_trimmed = args.reverse_reads[0].rstrip("R2.fastq.gz") + "2P.fastq.gz"
-
-    return(forward_trimmed, reverse_trimmed)
+    return(F_paired, R_paired)

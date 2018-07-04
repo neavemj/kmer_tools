@@ -21,6 +21,8 @@ parser.add_argument('-1', '--forward_reads', type = str,
         nargs=1, help = "fastq forward reads")
 parser.add_argument('-2', '--reverse_reads', type = str,
         nargs=1, help = "fastq reverse reads")
+parser.add_argument("-s", "--stem", type =str,
+        nargs=1, help = "a stem name for the output, i.e., sample_405")
 parser.add_argument('--trim', action = 'store_true',
         help = "perform trimming with trimmomatic?")
 parser.add_argument('-t', '--threads', type = str,
@@ -32,20 +34,26 @@ if len(sys.argv) == 1:  # if no args are given
 
 args = parser.parse_args()
 
-print(args)
+# check required arguments are provided
 
-# check bbmap has been loaded
+if args.forward_reads is None or args.reverse_reads is None or args.stem is None:
+    print("\n~~~ required output is missing ~~~\n"
+          "~~~ forward reads, reverse reads, and an output stem for file names are required ~~~\n")
+    parser.print_help(sys.stderr)
+    sys.exit(1)
 
-#try:
-#    tmp = subprocess.call(["khist.sh", "-version"])
-#except OSError as e:
-#    if e.errno == os.errno.ENOENT:
-#        print("\nkhist could not be found: try 'module load bbmap'\n")
-#        raise
+# check that bbmap is loaded
+
+try:
+    tmp = subprocess.call(["khist.sh", "-version"])
+except OSError as e:
+    if e.errno == os.errno.ENOENT:
+        print("\nkhist could not be found: try 'module load bbmap'\n")
+        raise
 
 # grab stem name of files for later
 
-stem = args.forward_reads[0].split("_")[0]
+stem = args.stem[0]
 
 if args.trim:
     F_read, R_read = trimmer(args, stem)
