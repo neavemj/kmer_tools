@@ -7,12 +7,12 @@ import os
 def trimmer(args, stem):
 
     """
-    uses trimmomatic to trim fastq Illunina reads (paired end)
+    uses trimmomatic to trim fastq Illumina reads (paired end)
     adapters will be detected in the default CSIRO location
-    :param args: argparse arguments used to grab the F and R reads
+    :param args: argparse object used to grab the F and R reads
     :param stem: stem of the filename used for output file naming
     :return: returns the names of the F and R trimmed files
-    :raise: errors will be raised if the adapters can't be found or \
+    :raise: errors will be raised if the adapters can't be found or
     if trimmomatic is not available on the path
     """
     # first check that the adapters are accessible
@@ -35,7 +35,9 @@ def trimmer(args, stem):
     ## TRIM READS ##
     print("~~~ beginning trimming with trimmomatic ~~~")
 
-    subprocess.check_output(["trimmomatic", "PE", "-threads", args.threads, args.forward_reads[0], args.reverse_reads[0], "-baseout", stem+".fastq.gz", "ILLUMINACLIP:" + adapter_path + ":2:30:10", "LEADING:3", "TRAILING:3", "SLIDINGWINDOW:4:20", "MINLEN:50"])
+    subprocess.check_output(["trimmomatic", "PE", "-threads", args.threads, args.forward_reads[0],
+                             args.reverse_reads[0], "-baseout", stem+".fastq.gz", "ILLUMINACLIP:" + adapter_path +
+                             ":2:30:10", "LEADING:3", "TRAILING:3", "SLIDINGWINDOW:4:20", "MINLEN:50"])
 
     forward_trimmed = args.forward_reads[0].rstrip("R1.fastq.gz") + "1P.fastq.gz"
     reverse_trimmed = args.reverse_reads[0].rstrip("R2.fastq.gz") + "2P.fastq.gz"
