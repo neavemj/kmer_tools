@@ -15,7 +15,11 @@ from quality_check_trim import trimmer
 
 # argparse to collect command line arguments
 
-parser = argparse.ArgumentParser("take raw NGS reads, trim, calculate 31-mer peaks, and produce a graph\nnote: requires trimmomatic and bbmap to be present on the path\nnote: requires pandas and matplotlib to be installed in python\nnote: the bbmap step can use a lot of memory (around 70 Gb for a HiSeq lane)\nnote: the stem of input files should be separated by an underscore\n")
+parser = argparse.ArgumentParser("take raw NGS reads, optionally trim, calculate 31-mer peaks, and produce a "
+                                 "graph\nnote: "
+                                 "requires trimmomatic and bbmap to be present on the path\nnote: requires pandas "
+                                 "and matplotlib to be installed in python\nnote: the bbmap step can use a lot of "
+                                 "memory (around 70 Gb for a HiSeq lane)\n")
 
 parser.add_argument('-1', '--forward_reads', type = str,
         nargs=1, help = "fastq forward reads")
@@ -58,8 +62,8 @@ stem = args.stem[0]
 if args.trim:
     F_read, R_read = trimmer(args, stem)
 else:
-    F_read = args.forward_reads
-    R_read = args.reverse_reads
+    F_read = args.forward_reads[0]
+    R_read = args.reverse_reads[0]
 
 # now use bbmap's khist to draw kmer profile
 
