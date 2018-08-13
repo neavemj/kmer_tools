@@ -26,7 +26,7 @@ parser.add_argument('-1', '--forward_reads', type = str,
 parser.add_argument('-2', '--reverse_reads', type = str,
         nargs=1, help = "fastq reverse reads")
 parser.add_argument("-s", "--stem", type =str,
-        nargs=1, help = "a stem name for the output, i.e., sample_405")
+        nargs=1, help = "a stem name for the output, e.g., sample_405")
 parser.add_argument('--trim', action = 'store_true',
         help = "perform trimming with trimmomatic?")
 parser.add_argument('-t', '--threads', type = str,
@@ -69,7 +69,7 @@ else:
 
 print("~~~ beginning kmer profile with bbmap ~~~")
 
-subprocess.call(["khist.sh", "in=" + F_read, "in2=" + R_read, "khist=" + stem + ".khist.txt", "threads=16",
+subprocess.call(["khist.sh", "in=" + F_read, "in2=" + R_read, "khist=" + stem + ".khist.txt", "threads=" + args.threads,
  "k=31"])
 
 # create a quick graph from the khist file
