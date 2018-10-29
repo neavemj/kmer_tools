@@ -79,7 +79,7 @@ print("~~~ drawing kmer figure  ~~~")
 
 khist = pd.read_csv(stem + ".khist.txt", sep="\t")
 
-khist.plot(x="#Depth", y="Unique_Kmers", xlim=[0, 10000], ylim=[0, 3000])
+khist.plot(x="#Depth", y="Unique_Kmers", xlim=[0, 80000], ylim=[0, 1000])
 
 plt.savefig(stem + ".khist.png", dpi=300)
 
